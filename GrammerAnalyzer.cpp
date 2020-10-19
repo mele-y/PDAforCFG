@@ -36,13 +36,15 @@ public: void readGrammer(QTextDocument * doc);//读文法，生成基本数据
         bool isInSet(QString ch,QSet<QChar> set);//判断ch是否在set中
         void showSet(QSet<QChar> set);
         void showProductions();
-        void noEpoProductions();//除去epoislon产生式
+        void removeEpoProductions();//除去epoislon产生式
         void processProductions(Production p);//生成单个产生式派生的产生式
         //void BFSProduction(Production p,QQueue<int> queue,bool hasNotNull,int count);
         void BFSProduction(Production p,QQueue<int> queue,int count);//对产生式中的可空符号广度优先搜索，派生产生式
         void showNoEposProductions();
         bool isInNOepsiPro(Production p);//判断一个产生式是否在去除epsilon的产生式集中
         void removeSingleProduction();//去除单一产生式
+        bool isInNOSinglePro(Production p);
+        void showNOSinglePro();
 };
 
 //将符号加入非终结符集中
@@ -93,8 +95,10 @@ void GrammerAnalyzer::readGrammer(QTextDocument* doc){
     showProductions();
     nullable_V=nullAbleV();//返回可空符号集
     showSet(nullable_V);
-    noEpoProductions();//去eposilon产生式
+    removeEpoProductions();//去eposilon产生式
     showNoEposProductions();
+    removeSingleProduction();
+    showNOSinglePro();
 }
 
 //功能：若产生式P已在去epsilon产生式集中返回ture，否则返回false
@@ -214,7 +218,7 @@ void GrammerAnalyzer::BFSProduction(Production p, QQueue<int> queue,int count)
 }
 
 //功能：去除原产生式集中的epsilon产生式，派生的新产生式放入NOepsilon_products中
-void GrammerAnalyzer::noEpoProductions(){
+void GrammerAnalyzer::removeEpoProductions(){
     for(int i=0;i<products.size();i++)
     {
         if(products[i].right=="$")
@@ -227,4 +231,73 @@ void GrammerAnalyzer::noEpoProductions(){
 void GrammerAnalyzer::showNoEposProductions(){
     for(int i=0;i<NOepsi_products.size();i++)
         qDebug()<<NOepsi_products[i].left<<"->"<<NOepsi_products[i].right<<endl;
+}
+void GrammerAnalyzer::removeSingleProduction(){
+    QMap<QChar,QSet<QChar>> map;
+    QSet<QChar> new_set,old_set;
+    for(int i=0;i<Vars.length();i++)
+    {
+        QChar ch=Vars[i];
+        old_set.clear();
+        new_set.clear();
+        new_set.insert(ch);
+        while(new_set!=old_set)
+        {
+           old_set=new_set;
+           for(int j=0;j<NOepsi_products.size();j++)
+           {
+               QChar left=NOepsi_products[j].left;
+               QString right=NOepsi_products[j].right;
+               if(!old_set.contains(left))
+                   continue;
+               if(right.length()>1)
+                   continue;
+               QChar temp=right[0];
+               if(V_set.contains(temp))
+               {
+                   new_set.insert(temp);
+               }
+               else
+                   continue;
+           }
+        }
+        map[ch]=old_set;
+        Production p;
+        p.left=ch;
+        for(int j=0;j<NOepsi_products.size();j++)
+        {    Production p1=NOepsi_products[j];
+            if(!map[ch].contains(p1.left))
+                    continue;
+             if(p1.right.length()>1)
+              {
+                p.right=p1.right;
+                if(!isInNOSinglePro(p))
+                     NOsingle_products.push_back(p);
+              }
+             else
+              {
+                 if(Vars.contains(p1.right[0]))
+                     continue;
+                 else
+                     p.right=p1.right;
+                     if(!isInNOSinglePro(p))
+                          NOsingle_products.push_back(p);
+              }
+        }
+    }
+}
+bool GrammerAnalyzer::isInNOSinglePro(Production p)
+{
+    for(int i=0;i<NOsingle_products.size();i++)
+    {
+        if(p==NOsingle_products[i])
+            return true;
+    }
+    return false;
+}
+void GrammerAnalyzer::showNOSinglePro(){
+    for(int i=0;i<NOsingle_products.size();i++)
+    {   Production p =NOsingle_products[i];
+        qDebug()<<p.left<<"->"<<p.right;
+    }
 }
