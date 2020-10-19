@@ -26,8 +26,8 @@ private:    QVector<QChar> Terminals;//终结符向量
             QSet<QChar> V_set;//非终结符集合
             QSet<QChar> nullable_V;//可空非终结符集合
             QVector<Production> products;//原产生式
-            QVector<Production> NOepos_products;//去epsilon产生式
-            //QSet<Production> NOepos_products_set;
+            QVector<Production> NOepsi_products;//去epsilon产生式
+
 public: void readGrammer(QTextDocument * doc);//读文法，生成基本数据
         void addToV(QChar ch);//将ch加入非终结符集中
         void addToT(QChar ch);//将ch加入终结符集中
@@ -35,14 +35,15 @@ public: void readGrammer(QTextDocument * doc);//读文法，生成基本数据
         bool isInSet(QString ch,QSet<QChar> set);//判断ch是否在set中
         void showSet(QSet<QChar> set);
         void showProductions();
-        void noEpoProductions();
-        void processProductions(Production p);
-        void BFSProduction(Production p,QQueue<int> queue,bool hasNotNull,int count);
+        void noEpoProductions();//除去epoislon产生式
+        void processProductions(Production p);//生成单个产生式派生的产生式
+        //void BFSProduction(Production p,QQueue<int> queue,bool hasNotNull,int count);
+        void BFSProduction(Production p,QQueue<int> queue,int count);//对产生式中的可空符号广度优先搜索，派生产生式
         void showNoEposProductions();
-        bool isInNOeposPro(Production p);
+        bool isInNOepsiPro(Production p);//判断一个产生式是否在去除epsilon的产生式集中
 };
 
-
+//将符号加入非终结符集中
 void GrammerAnalyzer::addToV(QChar ch)
 {
     if(!V_set.contains(ch))
@@ -52,7 +53,7 @@ void GrammerAnalyzer::addToV(QChar ch)
     }
 }
 
-
+//将符号加入终结符集中
 void GrammerAnalyzer::addToT(QChar ch)
 {
     if(!T_set.contains(ch))
@@ -62,9 +63,10 @@ void GrammerAnalyzer::addToT(QChar ch)
     }
 }
 
-
+//功能：读文法，初始化各项私有成员，去除epsilon产生式
+//输入参数：doc ui组件GrammerTextEdit的文本指针
 void GrammerAnalyzer::readGrammer(QTextDocument* doc){
-    int n=doc->blockCount();
+    int n=doc->blockCount();//文本中每一个换行符代表一个block
     QString line,temp;
     QChar V,ch;
     Production p;
@@ -80,31 +82,32 @@ void GrammerAnalyzer::readGrammer(QTextDocument* doc){
         for(int j=0;j<temp.length();j++)
         {
             ch=temp[j];
-            if(ch>='A'&&ch<='Z')
+            if(ch>='A'&&ch<='Z')//大写符号作为非终结符，其余全视为终结符
                 addToV(ch);
             else
                 addToT(ch);
         }
     }
     showProductions();
-    nullable_V=nullAbleV();
+    nullable_V=nullAbleV();//返回可空符号集
     showSet(nullable_V);
-   noEpoProductions();
+    noEpoProductions();//去eposilon产生式
     showNoEposProductions();
 }
 
-
-bool GrammerAnalyzer::isInNOeposPro(Production p)
+//功能：若产生式P已在去epsilon产生式集中返回ture，否则返回false
+bool GrammerAnalyzer::isInNOepsiPro(Production p)
 {
-    for(int i=0;i<NOepos_products.size();i++)
+    for(int i=0;i<NOepsi_products.size();i++)
     {
-        if(p==NOepos_products[i])
+        if(p==NOepsi_products[i])
             return true;
     }
     return false;
 }
 
 
+//功能：判断str是否在字符集set的克林闭包中，在返回true否则返回false
 bool GrammerAnalyzer::isInSet(QString str, QSet<QChar> set){
     for(int i=0;i<str.length();i++)
     {
@@ -116,6 +119,7 @@ bool GrammerAnalyzer::isInSet(QString str, QSet<QChar> set){
 }
 
 
+//功能：返回可空非终结符集
 QSet<QChar> GrammerAnalyzer::nullAbleV(){
     QSet<QChar> old_set;
     QSet<QChar> new_set;
@@ -154,74 +158,71 @@ void  GrammerAnalyzer::showSet(QSet<QChar> set)
     }
 }
 
-
+//功能：求出单个产生式因去除epsilon产生式而派生出的新产生式，结果存入NOepsi_producs中
 void GrammerAnalyzer::processProductions(Production p)
-{   bool hasNotNull=false;
-
-    QQueue<int> queue;
+{
+    //bool hasNotNull=false;
+    QQueue<int> queue;//队列queue记录可空符号的下标
     for(int i=0;i<p.right.length();i++)
     {
         QChar ch=p.right[i];
         if(nullable_V.contains(ch))
              queue.push_back(i);
-        else
-            hasNotNull=true;
+       // else
+         //   hasNotNull=true;
     }
-    if(!queue.size())//产生式右部无可空非终结符
+    if(!queue.size())//产生式右部无可空非终结符，直接加入新的产生式集合中，否则对产生式进行优先搜索
     {
-        if(!isInNOeposPro(p))
+        if(!isInNOepsiPro(p))
           {
             //NOepos_products_set.insert(p);
-            NOepos_products.push_back(p);
+            NOepsi_products.push_back(p);
           }
         return;
 
     }
     else
-    {   int count=0;
-        BFSProduction(p,queue,hasNotNull,count);
+    {   int count=0;//count记录将符号换为空串的次数
+        BFSProduction(p,queue,count);
     }
 }
 
-
-void GrammerAnalyzer::BFSProduction(Production p, QQueue<int> queue, bool hasNotNull,int count)
+//功能：表达不出来，对产生式右部的可空符号的替换过程广度优先搜索
+void GrammerAnalyzer::BFSProduction(Production p, QQueue<int> queue,int count)
 {
     if(!queue.size())
         return;
     int n=queue.front();
     queue.pop_front();
     Production temp=p;
-    if(!isInNOeposPro(temp))//不替换
+    if(!isInNOepsiPro(temp))//不替换为空串
     {
         //NOepos_products_set.insert(temp);
-        NOepos_products.push_back(temp);
+        NOepsi_products.push_back(temp);
     }
-    BFSProduction(temp,queue,hasNotNull,count);
+    BFSProduction(temp,queue,count);
     int index=n-count;
-    temp.right=p.right.remove(index,1);
-    if(!isInNOeposPro(temp)&&temp.right.length()!=0)//替换
+    temp.right=p.right.remove(index,1);//替换为空串
+    if(!isInNOepsiPro(temp)&&temp.right.length()!=0)
     {
         //NOepos_products_set.insert(temp);
-        NOepos_products.push_back(temp);
+        NOepsi_products.push_back(temp);
     }
-    BFSProduction(temp,queue,hasNotNull,count+1);
+    BFSProduction(temp,queue,count+1);
 }
 
-
+//功能：去除原产生式集中的epsilon产生式，派生的新产生式放入NOepsilon_products中
 void GrammerAnalyzer::noEpoProductions(){
     for(int i=0;i<products.size();i++)
     {
         if(products[i].right=="$")
             continue;
-        for(int j=0;j<products[i].right.size();j++)
-        {
-                 processProductions(products[i]);
-        }
+         processProductions(products[i]);
     }
 }
 
 
 void GrammerAnalyzer::showNoEposProductions(){
-    for(int i=0;i<NOepos_products.size();i++)
-        qDebug()<<NOepos_products[i].left<<"->"<<NOepos_products[i].right<<endl;
+    for(int i=0;i<NOepsi_products.size();i++)
+        qDebug()<<NOepsi_products[i].left<<"->"<<NOepsi_products[i].right<<endl;
 }
