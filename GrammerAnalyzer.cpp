@@ -27,6 +27,7 @@ private:    QVector<QChar> Terminals;//终结符向量
             QSet<QChar> nullable_V;//可空非终结符集合
             QVector<Production> products;//原产生式
             QVector<Production> NOepsi_products;//去epsilon产生式
+            QVector<Production> NOsingle_products;//去单一产生式
 
 public: void readGrammer(QTextDocument * doc);//读文法，生成基本数据
         void addToV(QChar ch);//将ch加入非终结符集中
@@ -41,6 +42,7 @@ public: void readGrammer(QTextDocument * doc);//读文法，生成基本数据
         void BFSProduction(Production p,QQueue<int> queue,int count);//对产生式中的可空符号广度优先搜索，派生产生式
         void showNoEposProductions();
         bool isInNOepsiPro(Production p);//判断一个产生式是否在去除epsilon的产生式集中
+        void removeSingleProduction();//去除单一产生式
 };
 
 //将符号加入非终结符集中
