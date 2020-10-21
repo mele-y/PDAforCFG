@@ -25,9 +25,12 @@ private:    QVector<QChar> Terminals;//终结符向量
             QSet<QChar> T_set;//终结符集合
             QSet<QChar> V_set;//非终结符集合
             QSet<QChar> nullable_V;//可空非终结符集合
+            QSet<QChar> T_use;//有用终结符集合
+            QSet<QChar> V_use;//有用非终结符集合
             QVector<Production> products;//原产生式
             QVector<Production> NOepsi_products;//去epsilon产生式
             QVector<Production> NOsingle_products;//去单一产生式
+            QVector<Production> Use_products; //有用的产生式
 
 public: void readGrammer(QTextDocument * doc);//读文法，生成基本数据
         void addToV(QChar ch);//将ch加入非终结符集中
@@ -45,6 +48,8 @@ public: void readGrammer(QTextDocument * doc);//读文法，生成基本数据
         void removeSingleProduction();//去除单一产生式
         bool isInNOSinglePro(Production p);
         void showNOSinglePro();
+        void removeNotUseProductions();//去除无用的产生式
+        void ShowUseProductions();
 };
 
 //将符号加入非终结符集中
@@ -99,6 +104,8 @@ void GrammerAnalyzer::readGrammer(QTextDocument* doc){
     showNoEposProductions();
     removeSingleProduction();
     showNOSinglePro();
+    removeNotUseProductions();
+    ShowUseProductions();
 }
 
 //功能：若产生式P已在去epsilon产生式集中返回ture，否则返回false
@@ -299,5 +306,77 @@ void GrammerAnalyzer::showNOSinglePro(){
     for(int i=0;i<NOsingle_products.size();i++)
     {   Production p =NOsingle_products[i];
         qDebug()<<p.left<<"->"<<p.right;
+    }
+}
+
+void  GrammerAnalyzer::removeNotUseProductions(){
+
+     QVector<Production> pTemp;
+     QSet<QChar> vTemp;
+     bool flag;
+
+     //先删除非产生的式子和集合元素
+
+     //遍历第一次找到A->a的可产生变量
+     for (auto i :NOsingle_products) { //遍历上一次处理的产生式
+         if (isInSet(i.right, T_set)&&(!vTemp.contains(i.left))) //判断右边都是终结符
+                 vTemp.insert(i.left);//添加可产生的变量
+     }
+     //循环迭代，反复查找在右边是否有可产生的变量，并添加
+     do{
+         flag=false;
+         for (auto i :NOsingle_products) { //遍历产生式
+             if (isInSet(i.right, vTemp+T_set)&&(!vTemp.contains(i.left))){//判断右边只有可产生的变量和终结符
+                 flag=true;
+                 vTemp.insert(i.left);//添加可产生的变量
+             }
+         }
+
+     }while(flag);
+
+     for (auto i :NOsingle_products) { //添加有用产生式
+         if (isInSet(i.left,vTemp)&&isInSet(i.right,vTemp+T_set))
+         pTemp.append(i);
+     }
+
+     //再删除不可达的式子和集合元素
+
+     //首先放入S
+     V_use.insert('S');
+
+     do{
+         flag=false;
+         for (auto i :pTemp) //遍历产生式
+             if(isInSet(i.left,V_use))//左边在可达的变量集合中
+                 for(auto k:i.right){
+                     if(isInSet(k,T_set)&&(!T_use.contains(k))){//把右边终结符放到可达终结符集合中
+                         flag=true;
+                         T_use.insert(k);
+                     }
+                     if(isInSet(k,vTemp)&&(!V_use.contains(k))){//把右边非终结符放到可达非终结符集合中
+                         flag=true;
+                         V_use.insert(k);
+                     }
+                }
+         } while(flag);
+
+       for (auto i :pTemp) { //添加有用产生式
+           if (isInSet(i.left,V_use)&&isInSet(i.right,V_use+T_use))
+           Use_products.append(i);
+       }
+}
+
+void GrammerAnalyzer::ShowUseProductions(){
+    qDebug()<<"非终结符集合："<<endl;
+    for(auto i :V_use)
+        qDebug()<<i;
+
+     qDebug()<<"终结符集合："<<endl;
+     for(auto i :T_use)
+         qDebug()<<i;
+
+    qDebug()<<"产生式："<<endl;
+    for(auto i :Use_products){
+        qDebug()<<i.left<<"->"<<i.right<<endl;
     }
 }
