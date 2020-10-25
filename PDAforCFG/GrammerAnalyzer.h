@@ -27,6 +27,10 @@ struct GNFProduction
 {
     QString left;
     QVector<QString> right;
+    bool operator<=(const GNFProduction p) const
+    {
+        return (this->left)<=p.left;
+    }
 };
 class GNF{
 private: QVector<QString> terminals;
@@ -35,12 +39,16 @@ private: QVector<QString> terminals;
          QVector<QString> vars;
          QSet<QString> v_set;
          QVector<GNFProduction> gnf_pro;
+         QVector<GNFProduction> g2;
+         QVector<GNFProduction> g3;
          QMap<QChar,QString> trans; //'a'->"a",'S'->"A1"
          int vars_count=1;
+         int B_count=1;
 
 public: void initialGNF(QVector<QChar> T,QVector<QChar> V,QVector<Production> p);
         bool f(QString str);
         void showProduction();
+        void generateG3();
 };
 class GrammerAnalyzer{
 private:    QVector<QChar> Terminals;//终结符向量

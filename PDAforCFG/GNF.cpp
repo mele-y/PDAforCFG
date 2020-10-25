@@ -1,4 +1,4 @@
-
+#include <algorithm>
 #include "GrammerAnalyzer.h"
 bool GNF::f(QString str)
 {    bool flag=true;
@@ -86,4 +86,73 @@ void GNF::showProduction()
         qDebug()<<i.left<<"->"<<temp;
     }
 }
+void GNF::generateG3()
+{
+     int size=vars_count-1;
+    sort(g2.begin(),g2.end());
+    QVector< QVector<GNFProduction> > v1(size);
+    QVector<GNFProduction>  vb;
+    QVector< QVector<GNFProduction> > v2(size);
+    QVector<GNFProduction>  vb2;
+    for(auto i:g2)
+    {
+       //if(t_set.contains(i.right[0]))
+        //    g3.push_back(i);
+       if(i.left[0]=='A')
+       {
+           int n=i.left.mid(1).toInt();
+           v1[n-1].push_back(i);
+       }
+       if(i.left[0]=='B')
+       {
+           vb.push_back(i);
 
+       }
+    }
+    v2[size-1]=v1[size-1];//下标最大的Ai右侧第一个字符一定是终结符，直接加入
+    for(int i=size-2;i>=0;i--)//从下标第二大的Ai开始遍历
+    {
+         for(auto k:v1[i])//
+         {
+             if(t_set.contains(k.right[0]))//右侧第一个字符为终结符，直接加入
+             {
+                 v2[i].push_back(k);
+                 continue;
+             }
+             else
+             {
+                 int m=k.right[0].mid(1).toInt();//获取右侧第一个非终结符的下标，一定大于左侧非终结符的下标；
+                 k.right.removeFirst();
+                 for(auto n:v2[m-1])//遍历下标为m的已经符合要求的产生式
+                 {
+                     GNFProduction p;
+                     p.left=k.left;
+                     p.right+=n.right;
+                     p.right+=k.right;
+                     v2[i].push_back(p);
+                 }
+             }
+         }
+    }
+    for( auto i:vb)
+    {
+       if(t_set.contains(i.right[0]))//右侧第一个字符非终结符，直接加入
+       {
+           vb2.push_back(i);
+           continue;
+       }
+       else
+       {
+           int n=i.right[0].mid(1).toInt();//获取右侧第一个字符的下标
+           i.right.removeFirst();
+           for(auto j:v2[n-1])
+           {
+              GNFProduction p;
+              p.left=i.left;
+              p.right+=j.right;
+              p.right+=i.right;
+
+           }
+       }
+    }
+}
