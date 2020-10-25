@@ -148,7 +148,6 @@ void GNF::toG2(){
             else if((readNumber(k.left)==readNumber(k.right[0]))&&(k.right[0][0]==k.left[0])){//消除直接左递归
                 //引入B
                 QString B=QString("B%1").arg(B_conut++);
-                qDebug()<<B;
                 for(auto j:old){
                     if(j.left==k.right[0]&&j.right!=k.right){ //找到所有Ak的其他产生式
 
