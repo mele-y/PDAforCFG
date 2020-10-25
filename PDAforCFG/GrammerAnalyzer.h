@@ -38,9 +38,17 @@ private: QVector<QString> terminals;
          QMap<QChar,QString> trans; //'a'->"a",'S'->"A1"
          int vars_count=1;
 
+         QVector<GNFProduction> gnf_g2;//G2产生式
+         int B_conut=1;//B的顺序
+
 public: void initialGNF(QVector<QChar> T,QVector<QChar> V,QVector<Production> p);
         bool f(QString str);
         void showProduction();
+
+        void toG2(); //转换成G2的算法
+        int readNumber(QString s);//读出非终结符序号
+
+
 };
 class GrammerAnalyzer{
 private:    QVector<QChar> Terminals;//终结符向量
@@ -49,13 +57,12 @@ private:    QVector<QChar> Terminals;//终结符向量
             QSet<QChar> T_set;//终结符集合
             QSet<QChar> V_set;//非终结符集合
             QSet<QChar> nullable_V;//可空非终结符集合
-            QSet<QChar> T_use;//有用终结符集合
-            QSet<QChar> V_use;//有用非终结符集合
             QVector<Production> products;//原产生式
             QVector<Production> NOepsi_products;//去epsilon产生式
             QVector<Production> NOsingle_products;//去单一产生式
             QVector<Production> Use_products; //有用的产生式
             GNF gnf;
+
 
 
 public: void readGrammer(QTextDocument * doc);//读文法，生成基本数据
@@ -75,5 +82,4 @@ public: void readGrammer(QTextDocument * doc);//读文法，生成基本数据
         bool isInNOSinglePro(Production p);
         void showNOSinglePro();
         void removeNotUseProductions();//去除无用的产生式
-        void ShowUseProductions();
 };

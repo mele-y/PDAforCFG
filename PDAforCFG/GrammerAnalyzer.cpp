@@ -52,7 +52,6 @@ void GrammerAnalyzer::readGrammer(QTextDocument* doc){
     removeSingleProduction();
     showNOSinglePro();
     removeNotUseProductions();
-    ShowUseProductions();
     gnf.initialGNF(Terminals,Vars,products);
 }
 
@@ -258,6 +257,9 @@ void GrammerAnalyzer::showNOSinglePro(){
 }
 
 void  GrammerAnalyzer::removeNotUseProductions(){
+    QSet<QChar> T_use;//有用终结符集合
+    QSet<QChar> V_use;//有用非终结符集合
+
 
      QVector<Production> pTemp;
      QSet<QChar> vTemp;
@@ -312,19 +314,14 @@ void  GrammerAnalyzer::removeNotUseProductions(){
            if (isInSet(i.left,V_use)&&isInSet(i.right,V_use+T_use))
            Use_products.append(i);
        }
-}
 
-void GrammerAnalyzer::ShowUseProductions(){
-    qDebug()<<"非终结符集合："<<endl;
-    for(auto i :V_use)
-        qDebug()<<i;
-
-     qDebug()<<"终结符集合："<<endl;
-     for(auto i :T_use)
-         qDebug()<<i;
-
-    qDebug()<<"产生式："<<endl;
-    for(auto i :Use_products){
-        qDebug()<<i.left<<"->"<<i.right<<endl;
-    }
+       //删除符号向量中未出现的字符
+       for(auto i :Terminals){
+           if(!T_use.contains(i))
+               Terminals.erase(&i);
+       }
+       for(auto i : Vars){
+           if(!V_use.contains(i))
+               Vars.erase(&i);
+       }
 }
