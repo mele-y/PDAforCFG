@@ -73,6 +73,9 @@ void GNF::initialGNF(QVector<QChar> T, QVector<QChar> V, QVector<Production> p)
         gnf_pro.push_back(gp);
     }
     showProduction();
+
+    toG2();
+    showG2Production();
 }
 void GNF::showProduction()
 {   qDebug()<<"文法G1：";
@@ -87,6 +90,20 @@ void GNF::showProduction()
     }
 }
 
+void GNF::showG2Production(){
+    qDebug()<<"文法G2：";
+       for(auto i:gnf_g2)
+       {
+           QString temp;
+           for(auto j:i.right)
+           {
+               temp+=j;
+           }
+           qDebug()<<i.left<<"->"<<temp;
+       }
+}
+
+
 int GNF::readNumber(QString s){
     QString num="";
     for(QString::iterator it=s.begin()+1;it!=s.end();it++){ //从第二个字符开始到结束全是数字
@@ -96,39 +113,51 @@ int GNF::readNumber(QString s){
 }
 
 void GNF::toG2(){
-    for(auto k :gnf_pro){ //遍历产生式
-        if(k.right[0].length()<=1) //左边第一个只有终结符，直接加入P2
-            gnf_g2.append(k);
+    QVector<GNFProduction> old;//上一次的产生式
+    gnf_g2=gnf_pro;
+    do{
+        old=gnf_g2;//每次计算前赋值上一次产生式
+        gnf_g2.clear();
+    for(auto k :old){ //遍历产生式
+        if((k.right[0].length()<=1)){ //左边第一个只有终结符
+            //或者左边下标比右边大，直接加入P2
+            if(!gnf_g2.contains(k))//去重
+                gnf_g2.append(k);
+        }
         else { //否则说明左边第一个是非终结符
-            if(readNumber(k.left)>readNumber(k.right[0])){//消除间接左递归
-                for(auto j:gnf_pro){
+            if((readNumber(k.left)>readNumber(k.right[0]))&&(k.right[0][0]==k.left[0])){//消除间接左递归
+                for(auto j:old){
                     if(j.left==k.right[0]){ //找到所有Aj的产生式
 
                      QVector<QString> a=k.right;
                      a.removeFirst(); //保留右边第一个以后的式子
+
                      QVector<QString> r=j.right;
 
                      //添加Ak->ra
                      GNFProduction Ak;
-                     Ak.left=j.left;
+                     Ak.left=k.left;
                      Ak.right=r+a;
 
+                     if(!gnf_g2.contains(Ak))//去重
                      gnf_g2.append(Ak);
 
                     }
                 }
             }
-            if(readNumber(k.left)==readNumber(k.right[0])){//消除直接左递归
+            else if((readNumber(k.left)==readNumber(k.right[0]))&&(k.right[0][0]==k.left[0])){//消除直接左递归
                 //引入B
-                QString B="B"+QString(B_conut);
-                for(auto j:gnf_pro){
-                    if(j.left==k.right[0]){ //找到所有Ak的产生式
+                QString B=QString("B%1").arg(B_conut++);
+                qDebug()<<B;
+                for(auto j:old){
+                    if(j.left==k.right[0]&&j.right!=k.right){ //找到所有Ak的其他产生式
 
                         QVector<QString> a=k.right;
                         a.removeFirst(); //保留右边第一个以后的式子
 
 
                         //添加所有的Ak->b
+                        if(!gnf_g2.contains(j))//去重
                         gnf_g2.append(j);
 
                         //添加Ak->bB
@@ -136,23 +165,33 @@ void GNF::toG2(){
                         temp.left=j.left;
                         temp.right=j.right;
                         temp.right.append(B);
+                        if(!gnf_g2.contains(temp))//去重
                         gnf_g2.append(temp);
 
 
                         //添加B->a;
                         temp.left=B;
                         temp.right=a;
+                        if(!gnf_g2.contains(temp))//去重
                         gnf_g2.append(temp);
 
                         //添加B->aB;
                         temp.right.append(B);
+                        if(!gnf_g2.contains(temp))//去重
                         gnf_g2.append(temp);
 
                     }
-                B_conut++;
-            }
 
+            }
         }
+            else{
+                //左边下标比右边大，直接加入P2
+                if(!gnf_g2.contains(k))//去重
+                    gnf_g2.append(k);
+            }
         }
+
     }
+    }while (old!=gnf_g2);//不再增加跳出循环
+
 }

@@ -27,7 +27,12 @@ struct GNFProduction
 {
     QString left;
     QVector<QString> right;
+    bool operator==(const GNFProduction & p)const{
+        return (this->left==p.left)&&(this->right==p.right);
+    }
 };
+
+
 class GNF{
 private: QVector<QString> terminals;
          QSet<QString> t_set;
@@ -47,6 +52,7 @@ public: void initialGNF(QVector<QChar> T,QVector<QChar> V,QVector<Production> p)
 
         void toG2(); //转换成G2的算法
         int readNumber(QString s);//读出非终结符序号
+        void showG2Production();
 
 
 };
