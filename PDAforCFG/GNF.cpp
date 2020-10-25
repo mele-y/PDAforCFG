@@ -115,12 +115,12 @@ int GNF::readNumber(QString s){
 void GNF::toG2(){
     QVector<GNFProduction> old;//上一次的产生式
     gnf_g2=gnf_pro;
+    //生成所有的Ak->Ak;
     do{
         old=gnf_g2;//每次计算前赋值上一次产生式
         gnf_g2.clear();
     for(auto k :old){ //遍历产生式
-        if((k.right[0].length()<=1)){ //左边第一个只有终结符
-            //或者左边下标比右边大，直接加入P2
+        if((k.right[0].length()<=1)) { //左边第一个只有终结符
             if(!gnf_g2.contains(k))//去重
                 gnf_g2.append(k);
         }
@@ -128,7 +128,6 @@ void GNF::toG2(){
             if((readNumber(k.left)>readNumber(k.right[0]))&&(k.right[0][0]==k.left[0])){//消除间接左递归
                 for(auto j:old){
                     if(j.left==k.right[0]){ //找到所有Aj的产生式
-
                      QVector<QString> a=k.right;
                      a.removeFirst(); //保留右边第一个以后的式子
 
@@ -145,52 +144,64 @@ void GNF::toG2(){
                     }
                 }
             }
-            else if((readNumber(k.left)==readNumber(k.right[0]))&&(k.right[0][0]==k.left[0])){//消除直接左递归
-                //引入B
-                QString B=QString("B%1").arg(B_conut++);
-                for(auto j:old){
-                    if(j.left==k.right[0]&&j.right!=k.right){ //找到所有Ak的其他产生式
-
-                        QVector<QString> a=k.right;
-                        a.removeFirst(); //保留右边第一个以后的式子
-
-
-                        //添加所有的Ak->b
-                        if(!gnf_g2.contains(j))//去重
-                        gnf_g2.append(j);
-
-                        //添加Ak->bB
-                        GNFProduction temp;
-                        temp.left=j.left;
-                        temp.right=j.right;
-                        temp.right.append(B);
-                        if(!gnf_g2.contains(temp))//去重
-                        gnf_g2.append(temp);
-
-
-                        //添加B->a;
-                        temp.left=B;
-                        temp.right=a;
-                        if(!gnf_g2.contains(temp))//去重
-                        gnf_g2.append(temp);
-
-                        //添加B->aB;
-                        temp.right.append(B);
-                        if(!gnf_g2.contains(temp))//去重
-                        gnf_g2.append(temp);
-
-                    }
-
-            }
-        }
             else{
-                //左边下标比右边大，直接加入P2
+                //其他的产生式加入P2，不做处理
                 if(!gnf_g2.contains(k))//去重
                     gnf_g2.append(k);
             }
         }
 
     }
-    }while (old!=gnf_g2);//不再增加跳出循环
+    }while (old!=gnf_g2);
 
+    //处理所有的Ak->Ak;
+    do {
+        old=gnf_g2;//每次计算前赋值上一次产生式
+        for(auto k :old){ //遍历产生式
+        if((readNumber(k.left)==readNumber(k.right[0]))&&(k.right[0][0]==k.left[0])){ //找到所有的Ak->Ak
+            static int num=readNumber(k.left);
+            if(num!=readNumber(k.left)){
+                B_conut++;
+            }
+            QString B=QString("B%1").arg(B_conut);
+            for(QVector<GNFProduction>::iterator m=gnf_g2.begin();m!=gnf_g2.end();m++){//删除AK->Ak式子
+                if((*m).left==(*m).right[0]&&(*m).left==k.left){
+                    gnf_g2.erase(m);
+                }
+            }
+
+            for(auto j:old){ //找到所有Ak->AK的其他产生式
+                if(j.left==k.right[0]&&j.left!=j.right[0]){
+                    QVector<QString> a=k.right;
+                    a.removeFirst(); //保留右边第一个以后的式子
+
+
+                    //添加所有的Ak->b
+                    if(!gnf_g2.contains(j))//去重
+                    gnf_g2.append(j);
+
+                    //添加Ak->bB
+                    GNFProduction temp;
+                    temp.left=j.left;
+                    temp.right=j.right;
+                    temp.right.append(B);
+                    if(!gnf_g2.contains(temp))//去重
+                    gnf_g2.append(temp);
+
+
+                    //添加B->a;
+                    temp.left=B;
+                    temp.right=a;
+                    if(!gnf_g2.contains(temp))//去重
+                    gnf_g2.append(temp);
+
+                    //添加B->aB;
+                    temp.right.append(B);
+                    if(!gnf_g2.contains(temp))//去重
+                    gnf_g2.append(temp);
+                }
+            }
+        }
+        }
+    }while(old!=gnf_g2);
 }
