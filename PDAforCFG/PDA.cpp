@@ -79,9 +79,11 @@ void PDA::dfs(QVector<QString> v,QStack<QString> s)
           else
           {
             v.removeFirst();
+            s.pop();
             for(auto i:rule[ci])
             {
-                s.pop();
+
+
                 for(int j=i.size()-1;j>=0;j--)
                 {
                     s.push(i[j]);
@@ -89,7 +91,7 @@ void PDA::dfs(QVector<QString> v,QStack<QString> s)
                 dfs(v,s);
                 for(int j=i.size()-1;j>=0;j--)
                     s.pop();
-            }
+                }
           }
       }
 }
