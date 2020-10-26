@@ -55,7 +55,7 @@ void GrammerAnalyzer::readGrammer(QTextDocument* doc){
     removeNotUseProductions();
     gnf.initialGNF(Terminals,Vars,products);
     pda.initialPDA(gnf.returnTset(),gnf.returnGNFpro());
-    QString str="010000";
+    QString str="aaabbbb";
     pda.inference(str);
 }
 
