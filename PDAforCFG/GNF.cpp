@@ -164,12 +164,13 @@ void GNF::toG2(){
                 B_conut++;
             }
             QString B=QString("B%1").arg(B_conut);
+            QVector<GNFProduction> Temp=gnf_g2;
             for(QVector<GNFProduction>::iterator m=gnf_g2.begin();m!=gnf_g2.end();m++){//删除AK->Ak式子
                 if((*m).left==(*m).right[0]&&(*m).left==k.left){
-                    gnf_g2.erase(m);
+                    Temp.erase(m);
                 }
             }
-
+            gnf_g2=Temp;
             for(auto j:old){ //找到所有Ak->AK的其他产生式
                 if(j.left==k.right[0]&&j.left!=j.right[0]){
                     QVector<QString> a=k.right;

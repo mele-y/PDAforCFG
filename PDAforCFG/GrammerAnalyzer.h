@@ -89,3 +89,4 @@ public: void readGrammer(QTextDocument * doc);//读文法，生成基本数据
         void showNOSinglePro();
         void removeNotUseProductions();//去除无用的产生式
 };
+
