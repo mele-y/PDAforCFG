@@ -30,6 +30,8 @@ void GrammerAnalyzer::readGrammer(QTextDocument* doc){
     for(int i=0;i<n;i++)
     {
         line=doc->findBlockByNumber(i).text();
+        if(!line.length())
+            continue;
         V=line[0];
         temp=line.mid(3);
         p.left=V;

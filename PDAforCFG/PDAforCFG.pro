@@ -20,14 +20,17 @@ SOURCES += \
     GrammerAnalyzer.cpp \
     PDA.cpp \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    subwidge.cpp
 
 HEADERS += \
     GrammerAnalyzer.h \
-    mainwindow.h
+    mainwindow.h \
+    subwidge.h
 
 FORMS += \
-    mainwindow.ui
+    mainwindow.ui \
+    subwidge.ui
 
 # Default rules for deployment.
 qnx: target.path = /tmp/$${TARGET}/bin
