@@ -8,12 +8,27 @@
 #include<QTextDocument>
 #include<QString>
 #include<QTextBlock>
+#include<QStack>
 #include<iostream>
 #include<string>
 #include<vector>
 #include<QDebug>
 #include<QQueue>
 using namespace std;
+struct current_input{
+    QString input_ch;//输入带符号
+    QString stack_ch;//栈顶符号
+    current_input(QString input_ch,QString stack_ch)
+    {
+        this->input_ch=input_ch;
+        this->stack_ch=stack_ch;
+    }
+    bool operator<(const current_input &t)const
+    {
+        return input_ch+stack_ch<t.input_ch+t.stack_ch;
+    }
+};//PDA转换函数左部
+
 struct Production{
       QChar left;//产生式左部
       QString right;//产生式右部
@@ -31,7 +46,25 @@ struct GNFProduction
     {
         return (this->left)<=p.left;
     }
+    bool operator==(const GNFProduction & p)const{
+        return (this->left==p.left)&&(this->right==p.right);
+    }
 };
+class PDA{
+private: QMap<current_input,QSet<QVector<QString>>> rule;//NPDA的转换规则，同一输入可能对应不同
+         QVector<QString> Terminals;
+         //QVector<QString> Vars;
+         QSet<QString> t_set;
+         int ac_code=-1;//识别代码,0为可接受，1为含有不在文法中的终结符，2为无相应转换规则，3为未识别全部字符串即接受,4为栈未空，输入符号带已空
+         QString msg;
+         //QSet<QString> v_set;
+public:void generateRule(QVector<GNFProduction>);
+       void initialPDA(QSet<QString>,QVector<GNFProduction>);
+       void printRule();
+       bool inference(QString str);//判定字符串是否为可接受的语言
+       void dfs(QVector<QString>,QStack<QString>);
+};
+
 class GNF{
 private: QVector<QString> terminals;
          QSet<QString> t_set;
@@ -39,16 +72,24 @@ private: QVector<QString> terminals;
          QVector<QString> vars;
          QSet<QString> v_set;
          QVector<GNFProduction> gnf_pro;
-         QVector<GNFProduction> g2;
-         QVector<GNFProduction> g3;
+         QVector<GNFProduction> gnf_g3;
          QMap<QChar,QString> trans; //'a'->"a",'S'->"A1"
          int vars_count=1;
-         int B_count=1;
+         QVector<GNFProduction> gnf_g2;//G2产生式
+         int B_conut=1;//B的顺序
 
 public: void initialGNF(QVector<QChar> T,QVector<QChar> V,QVector<Production> p);
         bool f(QString str);
         void showProduction();
         void generateG3();
+        void generateG2();
+        void toG2(); //转换成G2的算法
+        int readNumber(QString s);//读出非终结符序号
+        void showG2Production();
+        void showG3Production();
+        QSet<QString> returnTset();
+        QVector<GNFProduction> returnGNFpro();
+
 };
 class GrammerAnalyzer{
 private:    QVector<QChar> Terminals;//终结符向量
@@ -57,13 +98,13 @@ private:    QVector<QChar> Terminals;//终结符向量
             QSet<QChar> T_set;//终结符集合
             QSet<QChar> V_set;//非终结符集合
             QSet<QChar> nullable_V;//可空非终结符集合
-            QSet<QChar> T_use;//有用终结符集合
-            QSet<QChar> V_use;//有用非终结符集合
             QVector<Production> products;//原产生式
             QVector<Production> NOepsi_products;//去epsilon产生式
             QVector<Production> NOsingle_products;//去单一产生式
             QVector<Production> Use_products; //有用的产生式
             GNF gnf;
+            PDA pda;
+
 
 
 public: void readGrammer(QTextDocument * doc);//读文法，生成基本数据
@@ -83,5 +124,4 @@ public: void readGrammer(QTextDocument * doc);//读文法，生成基本数据
         bool isInNOSinglePro(Production p);
         void showNOSinglePro();
         void removeNotUseProductions();//去除无用的产生式
-        void ShowUseProductions();
 };

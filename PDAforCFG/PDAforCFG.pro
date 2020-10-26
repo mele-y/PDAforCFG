@@ -18,6 +18,7 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += \
     GNF.cpp \
     GrammerAnalyzer.cpp \
+    PDA.cpp \
     main.cpp \
     mainwindow.cpp
 
