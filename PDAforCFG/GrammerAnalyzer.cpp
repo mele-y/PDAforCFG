@@ -1,4 +1,5 @@
 #include "GrammerAnalyzer.h"
+#include "PDA.h"
 //将符号加入非终结符集中
 void GrammerAnalyzer::addToV(QChar ch)
 {
@@ -317,12 +318,17 @@ void  GrammerAnalyzer::removeNotUseProductions(){
        }
 
        //删除符号向量中未出现的字符
-       for(auto i :Terminals){
-           if(!T_use.contains(i))
-               Terminals.erase(&i);
+       QVector<QChar> Temp=Terminals;
+       for(QVector<QChar>::iterator i=Terminals.begin();i!=Terminals.begin();i++){
+           if(!T_use.contains(*i))
+               Temp.erase(i);
        }
-       for(auto i : Vars){
-           if(!V_use.contains(i))
-               Vars.erase(&i);
+       Terminals=Temp;
+
+       Temp=Vars;
+       for(QVector<QChar>::iterator i=Vars.begin();i!=Vars.begin();i++){
+           if(!V_use.contains(*i))
+               Temp.erase(i);
        }
+       Vars=Temp;
 }
