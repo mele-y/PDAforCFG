@@ -3,9 +3,9 @@ void PDA::generateRule(QVector<GNFProduction> g3)
 {
    for(auto i:g3)
    {   QVector<QString>temp;
-       current_input s;
-       s.stack_ch=i.left;
-       s.input_ch=i.right[0];
+       current_input s(i.right[0],i.left);
+       //s.stack_ch=i.left;
+      // s.input_ch=i.right[0];
        if(i.right.length()==1)
        {
            temp.clear();
