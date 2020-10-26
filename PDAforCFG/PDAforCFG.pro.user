@@ -1,14 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<<<<<<< HEAD
-<!-- Written by QtCreator 4.11.0, 2020-10-25T21:21:28. -->
-=======
-<!-- Written by QtCreator 4.11.0, 2020-10-26T16:21:12. -->
->>>>>>> 1fa10a16a5d84113c16776652e0b85e6b0a059d5
+<!-- Written by QtCreator 4.11.0, 2020-10-26T21:35:26. -->
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
-  <value type="QByteArray">{67efcf79-cccc-4b8c-a1e3-bfae7b776554}</value>
+  <value type="QByteArray">{9f656c16-0062-435a-a86d-bc5ef185ccf2}</value>
  </data>
  <data>
   <variable>ProjectExplorer.Project.ActiveTarget</variable>
@@ -59,35 +55,21 @@
  <data>
   <variable>ProjectExplorer.Project.PluginSettings</variable>
   <valuemap type="QVariantMap">
-   <valuemap type="QVariantMap" key="AutoTest.ActiveFrameworks">
-    <value type="bool" key="AutoTest.Framework.Boost">true</value>
-    <value type="bool" key="AutoTest.Framework.GTest">true</value>
-    <value type="bool" key="AutoTest.Framework.QtQuickTest">true</value>
-    <value type="bool" key="AutoTest.Framework.QtTest">true</value>
-   </valuemap>
-   <value type="int" key="AutoTest.RunAfterBuild">0</value>
-   <value type="bool" key="AutoTest.UseGlobal">true</value>
-   <valuelist type="QVariantList" key="ClangCodeModel.CustomCommandLineKey">
-    <value type="QString">-fno-delayed-template-parsing</value>
-   </valuelist>
+   <valuelist type="QVariantList" key="ClangCodeModel.CustomCommandLineKey"/>
    <value type="bool" key="ClangCodeModel.UseGlobalConfig">true</value>
   </valuemap>
  </data>
  <data>
   <variable>ProjectExplorer.Project.Target.0</variable>
   <valuemap type="QVariantMap">
-   <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Desktop Qt 5.9.9 MinGW 32bit</value>
-   <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Desktop Qt 5.9.9 MinGW 32bit</value>
-   <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">qt.qt5.599.win32_mingw53_kit</value>
+   <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Desktop Qt 5.9.9 GCC 64bit</value>
+   <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">Desktop Qt 5.9.9 GCC 64bit</value>
+   <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">qt.qt5.599.gcc_64_kit</value>
    <value type="int" key="ProjectExplorer.Target.ActiveBuildConfiguration">0</value>
    <value type="int" key="ProjectExplorer.Target.ActiveDeployConfiguration">0</value>
    <value type="int" key="ProjectExplorer.Target.ActiveRunConfiguration">0</value>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.0">
-<<<<<<< HEAD
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">D:/QTproject/build-PDAforCFG-Desktop_Qt_5_9_9_MinGW_32bit-Debug</value>
-=======
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">/home/han/Desktop/LAST/PDAforCFG/build-PDAforCFG-Desktop_Qt_5_9_9_GCC_64bit-Debug</value>
->>>>>>> 1fa10a16a5d84113c16776652e0b85e6b0a059d5
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">/home/han/Desktop/GUI/PDAforCFG/build-PDAforCFG-Desktop_Qt_5_9_9_GCC_64bit-Debug</value>
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
@@ -135,11 +117,7 @@
     <value type="int" key="Qt4ProjectManager.Qt4BuildConfiguration.BuildConfiguration">2</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.1">
-<<<<<<< HEAD
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">D:/QTproject/build-PDAforCFG-Desktop_Qt_5_9_9_MinGW_32bit-Release</value>
-=======
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">/home/han/Desktop/LAST/PDAforCFG/build-PDAforCFG-Desktop_Qt_5_9_9_GCC_64bit-Release</value>
->>>>>>> 1fa10a16a5d84113c16776652e0b85e6b0a059d5
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">/home/han/Desktop/GUI/PDAforCFG/build-PDAforCFG-Desktop_Qt_5_9_9_GCC_64bit-Release</value>
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
@@ -187,11 +165,7 @@
     <value type="int" key="Qt4ProjectManager.Qt4BuildConfiguration.BuildConfiguration">0</value>
    </valuemap>
    <valuemap type="QVariantMap" key="ProjectExplorer.Target.BuildConfiguration.2">
-<<<<<<< HEAD
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">D:/QTproject/build-PDAforCFG-Desktop_Qt_5_9_9_MinGW_32bit-Profile</value>
-=======
-    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">/home/han/Desktop/LAST/PDAforCFG/build-PDAforCFG-Desktop_Qt_5_9_9_GCC_64bit-Profile</value>
->>>>>>> 1fa10a16a5d84113c16776652e0b85e6b0a059d5
+    <value type="QString" key="ProjectExplorer.BuildConfiguration.BuildDirectory">/home/han/Desktop/GUI/PDAforCFG/build-PDAforCFG-Desktop_Qt_5_9_9_GCC_64bit-Profile</value>
     <valuemap type="QVariantMap" key="ProjectExplorer.BuildConfiguration.BuildStepList.0">
      <valuemap type="QVariantMap" key="ProjectExplorer.BuildStepList.Step.0">
       <value type="bool" key="ProjectExplorer.BuildStep.Enabled">true</value>
@@ -311,14 +285,8 @@
     </valuelist>
     <value type="int" key="PE.EnvironmentAspect.Base">2</value>
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
-<<<<<<< HEAD
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName">PDAforCFG2</value>
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:D:/QTproject/PDA/PDAforCFG/PDAforCFG/PDAforCFG.pro</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">D:/QTproject/PDA/PDAforCFG/PDAforCFG/PDAforCFG.pro</value>
-=======
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:/home/han/Desktop/LAST/PDAforCFG/PDAforCFG/PDAforCFG.pro</value>
-    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/han/Desktop/LAST/PDAforCFG/PDAforCFG/PDAforCFG.pro</value>
->>>>>>> 1fa10a16a5d84113c16776652e0b85e6b0a059d5
+    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:/home/han/Desktop/GUI/PDAforCFG/PDAforCFG/PDAforCFG.pro</value>
+    <value type="QString" key="ProjectExplorer.RunConfiguration.BuildKey">/home/han/Desktop/GUI/PDAforCFG/PDAforCFG/PDAforCFG.pro</value>
     <value type="QString" key="RunConfiguration.Arguments"></value>
     <value type="bool" key="RunConfiguration.Arguments.multi">false</value>
     <value type="QString" key="RunConfiguration.OverrideDebuggerStartup"></value>
@@ -329,11 +297,7 @@
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
     <value type="QString" key="RunConfiguration.WorkingDirectory"></value>
-<<<<<<< HEAD
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">D:/QTproject/build-PDAforCFG-Desktop_Qt_5_9_9_MinGW_32bit-Debug</value>
-=======
-    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/home/han/Desktop/LAST/PDAforCFG/build-PDAforCFG-Desktop_Qt_5_9_9_GCC_64bit-Debug</value>
->>>>>>> 1fa10a16a5d84113c16776652e0b85e6b0a059d5
+    <value type="QString" key="RunConfiguration.WorkingDirectory.default">/home/han/Desktop/GUI/PDAforCFG/build-PDAforCFG-Desktop_Qt_5_9_9_GCC_64bit-Debug</value>
    </valuemap>
    <value type="int" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
   </valuemap>
