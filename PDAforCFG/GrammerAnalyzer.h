@@ -60,6 +60,7 @@ private: QMap<current_input,QSet<QVector<QString>>> rule;//NPDA的转换规则�
          QSet<QString> t_set;
          int ac_code=-1;//识别代码,0为可接受，1为含有不在文法中的终结符，2为无相应转换规则，3为未识别全部字符串即接受,4为栈未空，输入符号带已空
          QString msg;
+         int count;
          //QSet<QString> v_set;
 public:void generateRule(QVector<GNFProduction>);
        void initialPDA(QSet<QString>,QVector<GNFProduction>);

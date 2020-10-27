@@ -47,9 +47,12 @@ void PDA::dfs(QVector<QString> v,QStack<QString> s,int index)
       if(v.size()==0)
       {
           if(!s.empty())
-          {
+          {   if(index>count)
+              {
+              count=index;
               ac_code=4;
               msg="第"+QString::number(index)+"个符号"+"已接受，但此时栈未空";
+              }
               return ;
           }
 
@@ -64,8 +67,12 @@ void PDA::dfs(QVector<QString> v,QStack<QString> s,int index)
          }
          else
          {
+             if(index>count)
+             {
+                 count=index;
              ac_code=3;
              msg="栈已空,但字符带从第"+QString::number(index)+"个符号起尚未接受";
+             }
              return ;
          }
       }
@@ -76,8 +83,12 @@ void PDA::dfs(QVector<QString> v,QStack<QString> s,int index)
           current_input ci(input_ch,stack_ch);
           if(!rule.contains(ci))
           {
+              if(index>count)
+              {
+               count=index;
               ac_code=2;
               msg="第"+QString::number(index+1)+"个符号"+input_ch+"没有转换规则(q0,"+input_ch+","+stack_ch+")";
+              }
               return ;
           }
           else
@@ -101,7 +112,7 @@ void PDA::dfs(QVector<QString> v,QStack<QString> s,int index)
 }
 
 bool PDA::inference(QString str)
-{
+{   count=0;
     ac_code=-1;
     msg.clear();
     if(!str.length())
