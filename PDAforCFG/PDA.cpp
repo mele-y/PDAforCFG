@@ -130,6 +130,7 @@ bool PDA::inference(QString str)
     if(ac_code==0)
     {
       qDebug()<<"yes";
+
       return true;
     }
     else

@@ -1,7 +1,5 @@
-S->AbB
-S->aS
-A->BcB
+S->AB
+A->BS
 A->b
-B->ScB
-B->Abb
+B->SA
 B->a

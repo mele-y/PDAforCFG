@@ -1,7 +1,9 @@
 #ifndef SUBWIDGE_H
 #define SUBWIDGE_H
+#include"GrammerAnalyzer.h"
 
 #include <QWidget>
+#include <QCloseEvent>
 
 namespace Ui {
 class subwidge;
@@ -14,7 +16,8 @@ class subwidge : public QWidget
 public:
     explicit subwidge(QWidget *parent = nullptr);
     ~subwidge();
-    void setResult(bool);
+    void setResult(bool,pdaMsg);
+    void closeEvent(QCloseEvent *event);
 
 signals:
     void MySingal(QString);

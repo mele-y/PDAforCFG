@@ -14,6 +14,9 @@
 #include<vector>
 #include<QDebug>
 #include<QQueue>
+#include<QPair>
+
+typedef QPair<int,QString> pdaMsg;
 using namespace std;
 struct current_input{
     QString input_ch;//输入带符号
@@ -66,6 +69,11 @@ public:void generateRule(QVector<GNFProduction>);
        QMap<current_input,QSet<QVector<QString>>> getrule(){
            return rule;
        }
+       pdaMsg getMsg(){
+           pdaMsg Msg(ac_code,msg);
+           return Msg;
+       }
+
 };
 
 class GNF{

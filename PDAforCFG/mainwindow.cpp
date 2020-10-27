@@ -31,7 +31,9 @@ MainWindow::MainWindow(QWidget *parent)
             file.close();
         }
 
-
+            fileString.clear();
+            fileString.append("输入的文法：\n");
+            fileString.append(ui->GrammerTextEdit->toPlainText());
     }
 
 
@@ -45,8 +47,7 @@ MainWindow::MainWindow(QWidget *parent)
              QFile file(path);
              bool saveFlag=file.open(QIODevice::WriteOnly);
              if(saveFlag==true){
-                 QString str="待完成";
-                 file.write(str.toUtf8());
+                 file.write(fileString.toUtf8());
              }
              file.close();
          }
@@ -60,7 +61,7 @@ MainWindow::MainWindow(QWidget *parent)
             [=](){
         ui->displaytext->clear();
           ui->displaytext->append("消除epsilon产生式：");
-         QVector<Production>p=analyzer.getUse_products();
+         QVector<Production>p=analyzer.getNOepsi_products();
          for(auto i :p){
              QString s=QString(i.left)+"->"+i.right;
              ui->displaytext->append(s);
@@ -123,7 +124,7 @@ MainWindow::MainWindow(QWidget *parent)
             [=](){
         ui->displaytext->clear();
         ui->displaytext->append("转换成G3文法：");
-         QVector<GNFProduction>p=analyzer.gnf.getgnf_g3();
+        QVector<GNFProduction>p=analyzer.gnf.getgnf_g3();
          for(auto i :p){
              QString t="";
              for(auto j:i.right){
@@ -182,9 +183,98 @@ void MainWindow::on_translateButton_clicked()
     ui->displaytext->append("文法转换成功！");
     ui->displaytext->append("请在菜单里选择需要查看的内容！");
 
+
+    //添加文件信息
+    QVector<Production>p;
+    fileString.append("消除epsilon产生式：\n");
+    p=analyzer.getNOepsi_products();
+        for(auto i :p){
+                 QString s=QString(i.left)+"->"+i.right+"\n";
+                 fileString.append(s);
+        }
+        fileString.append("消除单一产生式：\n");
+        p=analyzer.getNOsingle_products();
+            for(auto i :p){
+                     QString s=QString(i.left)+"->"+i.right+"\n";
+                     fileString.append(s);
+            }
+        fileString.append("消除无用产生式：\n");
+        p=analyzer.getUse_products();
+            for(auto i :p){
+                     QString s=QString(i.left)+"->"+i.right+"\n";
+                     fileString.append(s);
+            }
+
+          QVector<GNFProduction>q;
+          fileString.append("转换成G1文法：\n");
+
+          q=analyzer.gnf.getgnf_pro();
+
+          for(auto i :q){
+             QString t="";
+             for(auto j:i.right){
+                 t+=j;
+             }
+             QString s=QString(i.left)+"->"+t+"\n";
+             fileString.append(s);
+         }
+          fileString.append("转换成G2文法：\n");
+
+          q=analyzer.gnf.getgnf_g2();
+
+          for(auto i :q){
+             QString t="";
+             for(auto j:i.right){
+                 t+=j;
+             }
+             QString s=QString(i.left)+"->"+t+"\n";
+             fileString.append(s);
+         }
+          fileString.append("转换成G3文法：\n");
+
+          q=analyzer.gnf.getgnf_g3();
+
+          for(auto i :q){
+             QString t="";
+             for(auto j:i.right){
+                 t+=j;
+             }
+             QString s=QString(i.left)+"->"+t+"\n";
+             fileString.append(s);
+         }
+          fileString.append("PDA转移函数：\n");
+           QMap<current_input,QSet<QVector<QString>>> rule=analyzer.pda.getrule();
+           for(auto i:rule.keys())
+           {  for(auto j:rule[i])
+               {
+                   QString temp;
+                for(auto k:j)
+                {
+                   temp+=k;
+                }
+                QString s="(q0,"+i.input_ch+","+i.stack_ch+")=(q0,"+temp+")"+"\n";
+                fileString.append(s);
+               }
+           }
 }
-
 void MainWindow::DealSingal(QString str){
+    bool flag=analyzer.pda.inference(str);
+    sub.setResult(flag,analyzer.pda.getMsg());
+    fileString.append("输入的串为：\n");
+    fileString.append(str+"\n");
+    fileString.append("测试结果为：\n");
+    if(flag){
+        fileString.append("Accept\n");
+        QString sr="祝贺你，该串"+analyzer.pda.getMsg().second+"!\n";
+         fileString.append(sr);
 
-    sub.setResult(analyzer.pda.inference(str));
+    }
+    else{
+        fileString.append("Reject");
+        QString sr=QString("错误代码%1：").arg(analyzer.pda.getMsg().first)+analyzer.pda.getMsg().second+"!\n";
+        fileString.append(sr);
+    }
+
+
+
 }
