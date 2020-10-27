@@ -3,6 +3,7 @@
 #include "ui_mainwindow.h"
 #include<QFileDialog>
 #include<QFile>
+#include<QMessageBox>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -11,6 +12,7 @@ MainWindow::MainWindow(QWidget *parent)
 
 
     ui->setupUi(this);
+    this->setWindowTitle("CFG2PDA");
     connect(ui->actionopen,&QAction::triggered,
             [=](){
         QString path =QFileDialog::getOpenFileName(this,"open","../");
@@ -164,6 +166,22 @@ MainWindow::MainWindow(QWidget *parent)
 
     void (subwidge::*SingalFun)(QString)=&subwidge::MySingal;
     connect(&sub,SingalFun,this,&MainWindow::DealSingal);
+
+    connect(ui->actionMsg,&QAction::triggered,
+            [=](){
+        QString str="       制作人:\n叶剑波、韩露露\n    版本:v1.0";
+        QMessageBox::about(this,"关于软件",str);
+    }
+
+            );
+    connect(ui->actionqt,&QAction::triggered,
+            [=](){
+        QMessageBox::aboutQt(this,"关于Qt");
+    }
+
+
+
+            );
 
 }
 
