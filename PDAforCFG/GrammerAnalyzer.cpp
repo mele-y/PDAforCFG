@@ -54,10 +54,9 @@ void GrammerAnalyzer::readGrammer(QTextDocument* doc){
     showNOSinglePro();
     removeNotUseProductions();
     gnf.initialGNF(Terminals,Vars,products);
+
     pda.initialPDA(gnf.returnTset(),gnf.returnGNFpro());
-    QString str="aaabbbb";
-    pda.inference(str);
-}
+    }
 
 //功能：若产生式P已在去epsilon产生式集中返回ture，否则返回false
 bool GrammerAnalyzer::isInNOepsiPro(Production p)

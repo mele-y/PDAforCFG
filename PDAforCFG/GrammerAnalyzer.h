@@ -63,6 +63,9 @@ public:void generateRule(QVector<GNFProduction>);
        void printRule();
        bool inference(QString str);//判定字符串是否为可接受的语言
        void dfs(QVector<QString>,QStack<QString>);
+       QMap<current_input,QSet<QVector<QString>>> getrule(){
+           return rule;
+       }
 };
 
 class GNF{
@@ -90,6 +93,20 @@ public: void initialGNF(QVector<QChar> T,QVector<QChar> V,QVector<Production> p)
         QSet<QString> returnTset();
         QVector<GNFProduction> returnGNFpro();
 
+        QVector<GNFProduction> getgnf_g2(){
+            return gnf_g2;
+
+        }
+        QVector<GNFProduction> getgnf_g3(){
+            return gnf_g3;
+
+        }
+        QVector<GNFProduction> getgnf_pro(){
+            return gnf_pro;
+        }
+
+
+
 };
 class GrammerAnalyzer{
 private:    QVector<QChar> Terminals;//终结符向量
@@ -102,12 +119,11 @@ private:    QVector<QChar> Terminals;//终结符向量
             QVector<Production> NOepsi_products;//去epsilon产生式
             QVector<Production> NOsingle_products;//去单一产生式
             QVector<Production> Use_products; //有用的产生式
-            GNF gnf;
-            PDA pda;
 
 
 
 public: void readGrammer(QTextDocument * doc);//读文法，生成基本数据
+
         void addToV(QChar ch);//将ch加入非终结符集中
         void addToT(QChar ch);//将ch加入终结符集中
         QSet<QChar> nullAbleV();//返回可空非终结符集
@@ -124,5 +140,22 @@ public: void readGrammer(QTextDocument * doc);//读文法，生成基本数据
         bool isInNOSinglePro(Production p);
         void showNOSinglePro();
         void removeNotUseProductions();//去除无用的产生式
+        GNF gnf;
+        PDA pda;
+
+        QVector<Production> getNOepsi_products(){
+            return NOepsi_products;
+        }
+
+        QVector<Production> getNOsingle_products(){
+            return NOsingle_products;
+        }
+
+        QVector<Production> getUse_products(){
+            return Use_products;
+        }
+
+
+
 };
 

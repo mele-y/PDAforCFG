@@ -271,10 +271,13 @@ void GNF::toG2(){
                 B_conut++;
             }
             QString B=QString("B%1").arg(B_conut);
-            QVector<GNFProduction> Temp=gnf_g2;
+            QVector<GNFProduction> Temp;
             for(QVector<GNFProduction>::iterator m=gnf_g2.begin();m!=gnf_g2.end();m++){//删除AK->Ak式子
                 if((*m).left==(*m).right[0]&&(*m).left==k.left){
-                    Temp.erase(m);
+                    //满足则删除
+                }
+                else{
+                    Temp.append(*m);
                 }
             }
             gnf_g2=Temp;

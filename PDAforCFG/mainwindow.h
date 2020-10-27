@@ -2,6 +2,7 @@
 #define MAINWINDOW_H
 
 #include <QMainWindow>
+#include<GrammerAnalyzer.h>
 
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
@@ -18,7 +19,10 @@ public:
 private slots:
     void on_translateButton_clicked();
 
+    void on_judjeButton_clicked();
+
 private:
     Ui::MainWindow *ui;
+    GrammerAnalyzer analyzer;
 };
 #endif // MAINWINDOW_H
