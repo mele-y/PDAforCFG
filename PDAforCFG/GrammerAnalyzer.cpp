@@ -30,6 +30,8 @@ void GrammerAnalyzer::readGrammer(QTextDocument* doc){
     for(int i=0;i<n;i++)
     {
         line=doc->findBlockByNumber(i).text();
+        if(!line.length())
+            continue;
         V=line[0];
         temp=line.mid(3);
         p.left=V;
@@ -53,7 +55,7 @@ void GrammerAnalyzer::readGrammer(QTextDocument* doc){
     removeSingleProduction();
     showNOSinglePro();
     removeNotUseProductions();
-    gnf.initialGNF(Terminals,Vars,products);
+    gnf.initialGNF(Terminals,Vars,Use_products);
 
     pda.initialPDA(gnf.returnTset(),gnf.returnGNFpro());
     }

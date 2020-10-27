@@ -38,7 +38,7 @@ void PDA::printRule(){
         }
     }
 }
-void PDA::dfs(QVector<QString> v,QStack<QString> s)
+void PDA::dfs(QVector<QString> v,QStack<QString> s,int index)
 {
       if(ac_code==0)
           return;
@@ -49,6 +49,7 @@ void PDA::dfs(QVector<QString> v,QStack<QString> s)
           if(!s.empty())
           {
               ac_code=4;
+              msg="第"+QString::number(index)+"个符号"+"已接受，但此时栈未空";
               return ;
           }
 
@@ -58,11 +59,13 @@ void PDA::dfs(QVector<QString> v,QStack<QString> s)
          if(!v.size())
          {
              ac_code=0;
+             msg="可接受";
              return  ;
          }
          else
          {
              ac_code=3;
+             msg="栈已空,但字符带从第"+QString::number(index)+"个符号起尚未接受";
              return ;
          }
       }
@@ -74,6 +77,7 @@ void PDA::dfs(QVector<QString> v,QStack<QString> s)
           if(!rule.contains(ci))
           {
               ac_code=2;
+              msg="第"+QString::number(index+1)+"个符号"+input_ch+"没有转换规则(q0,"+input_ch+","+stack_ch+")";
               return ;
           }
           else
@@ -88,7 +92,7 @@ void PDA::dfs(QVector<QString> v,QStack<QString> s)
                 {
                     s.push(i[j]);
                 }
-                dfs(v,s);
+                dfs(v,s,index+1);
                 for(int j=i.size()-1;j>=0;j--)
                     s.pop();
                 }
@@ -98,6 +102,8 @@ void PDA::dfs(QVector<QString> v,QStack<QString> s)
 
 bool PDA::inference(QString str)
 {
+    ac_code=-1;
+    msg.clear();
     if(!str.length())
         return false;
     QVector<QString> v;
@@ -117,8 +123,9 @@ bool PDA::inference(QString str)
    QStack<QString> stack;
    QString top="A1";
    stack.push(top);
-   //int index=0;
-    dfs(v,stack);
+   int index=0;
+   if(ac_code!=1)
+    dfs(v,stack,index);
 
     if(ac_code==0)
     {

@@ -62,7 +62,7 @@ public:void generateRule(QVector<GNFProduction>);
        void initialPDA(QSet<QString>,QVector<GNFProduction>);
        void printRule();
        bool inference(QString str);//判定字符串是否为可接受的语言
-       void dfs(QVector<QString>,QStack<QString>);
+       void dfs(QVector<QString>,QStack<QString>,int);
        QMap<current_input,QSet<QVector<QString>>> getrule(){
            return rule;
        }
