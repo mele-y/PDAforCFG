@@ -33,9 +33,11 @@ MainWindow::MainWindow(QWidget *parent)
             file.close();
         }
 
+
             fileString.clear();
             fileString.append("输入的文法：\n");
             fileString.append(ui->GrammerTextEdit->toPlainText());
+            ui->displaytext->clear();
     }
 
 
@@ -169,7 +171,7 @@ MainWindow::MainWindow(QWidget *parent)
 
     connect(ui->actionMsg,&QAction::triggered,
             [=](){
-        QString str="       制作人:\n叶剑波、韩露露\n    版本:v1.0";
+        QString str="       制作人:\n叶剑波、韩露露\n    版本:v2.0";
         QMessageBox::about(this,"关于软件",str);
     }
 
