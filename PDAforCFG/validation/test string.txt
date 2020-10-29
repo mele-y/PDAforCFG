@@ -1,0 +1,42 @@
+grammer 1:
+aabcc
+abcccccccc
+caabcc
+bbbb
+bbbbcabcbacbabcaab
+
+grammer 2:
+00011111
+10001111
+0101
+
+grammer 3:
+a
+aaa
+b
+
+grammer 4:
+babbaa
+cbabbaa
+ababaababa
+
+grammer 5:
+ab 接收
+aa 接收
+aaab 拒绝
+aaba 接收
+c 拒绝
+
+grammer 6
+bba 接收
+bbbbb 接收
+baa 拒绝
+aabb 拒绝
+abba 接收
+
+grammer 7:
+mn 接收
+mmn 接收
+nnm 拒绝
+mmmmo 接收
+

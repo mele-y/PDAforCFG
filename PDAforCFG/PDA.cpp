@@ -47,7 +47,7 @@ void PDA::dfs(QVector<QString> v,QStack<QString> s,int index)
       if(v.size()==0)
       {
           if(!s.empty())
-          {   if(index>count)
+          {   if(index>=count)
               {
               count=index;
               ac_code=4;
@@ -67,7 +67,7 @@ void PDA::dfs(QVector<QString> v,QStack<QString> s,int index)
          }
          else
          {
-             if(index>count)
+             if(index>=count)
              {
                  count=index;
              ac_code=3;
@@ -83,7 +83,7 @@ void PDA::dfs(QVector<QString> v,QStack<QString> s,int index)
           current_input ci(input_ch,stack_ch);
           if(!rule.contains(ci))
           {
-              if(index>count)
+              if(index>=count)
               {
                count=index;
               ac_code=2;
